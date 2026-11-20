@@ -1,0 +1,2172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#14243A">
+<title>SmartShuttle AI | Campus Mobility</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+ <div class="brand">
+  <div class="crest"><span>S</span></div>
+  <div><b>SMARTSHUTTLE<span> AI</span></b><small>CAMPUS MOBILITY SYSTEM</small></div>
+ </div>
+
+ <div class="campus-chip"><i></i> UNIVERSITY CAMPUS <b>DEMO</b></div>
+
+ <div class="nav-label">CAMPUS</div>
+ <nav>
+  <button class="nav active" data-page="dashboard"><span>⌂</span> Overview</button>
+  <button class="nav" data-page="tracking"><span>⌖</span> Live shuttle tracking <em class="live-dot"></em></button>
+  <button class="nav" data-page="routes"><span>⌁</span> Routes & bus stops</button>
+  <button class="nav" data-page="alerts"><span>♧</span> Alerts & notices <small id="alertBadge">2</small></button>
+ </nav>
+
+ <div class="nav-label">OPERATIONS</div>
+ <nav>
+  <button class="nav" data-page="analytics"><span>▥</span> AI performance</button>
+  <button class="nav" data-page="admin"><span>⚙</span> Transport control</button>
+ </nav>
+
+ <div class="sidebar-bottom">
+  <div class="help-card">
+   <span>✦ CAMPUS ASSIST</span>
+   <b>Your ride, in sync.</b>
+   <p>Smarter campus journeys start with reliable information.</p>
+   <button id="help">How it works ↗</button>
+  </div>
+
+  <div class="user">
+   <div class="user-avatar">AS</div>
+   <div><b>Student Portal</b><small>Campus commuter</small></div>
+   <span>•••</span>
+  </div>
+ </div>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+ <button id="menu" class="menu">☰</button>
+ <div class="crumb">Campus Services <b>/</b> <strong id="crumb">Overview</strong></div>
+ <div class="topright">
+  <div class="service-status"><i></i> ALL SYSTEMS OPERATIONAL</div>
+  <button class="round" id="theme">◐</button>
+  <button class="round" data-page="alerts">♧<i class="ping"></i></button>
+  <div class="avatar">AS</div>
+ </div>
+</header>
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="page show">
+
+ <div class="welcome">
+  <div>
+   <div class="overline">CAMPUS TRANSPORT <span>•</span> SMART MOBILITY</div>
+   <h1>Good evening, <span>student.</span></h1>
+   <p>Plan your campus commute with live shuttle intelligence.</p>
+  </div>
+  <button class="red-btn" data-page="tracking">Track my shuttle <b>↗</b></button>
+ </div>
+
+ <div class="hero">
+  <div class="hero-text">
+   <div class="hero-kicker"><i></i> SMART CAMPUS. SMARTER COMMUTE.</div>
+   <h2>Campus life<br>moves <em>better</em> together.</h2>
+   <p>Real-time shuttle visibility, intelligent arrival predictions and service alerts — all in one place.</p>
+   <button data-page="tracking">Explore live network <span>→</span></button>
+  </div>
+
+  <div class="hero-visual">
+   <div class="hero-road"></div>
+   <div class="campus-building building-a"><i>▥</i><small>ACADEMIC BLOCK</small></div>
+   <div class="campus-building building-b"><i>▤</i><small>LIBRARY</small></div>
+   <div class="campus-building building-c"><i>▥</i><small>HOSTELS</small></div>
+   <div class="route-path"></div>
+   <div class="hero-bus">▰<small>SHUTTLE 01</small></div>
+   <div class="hero-stop stop-a"></div>
+   <div class="hero-stop stop-b"></div>
+   <div class="hero-stop stop-c"></div>
+   <div class="hero-eta">NEXT ARRIVAL <b>02 MIN</b></div>
+  </div>
+
+  <div class="hero-stamp">SS<span>AI</span></div>
+ </div>
+
+ <div class="section-head">
+  <div><h2>Campus at a glance</h2><p>Your daily transport snapshot</p></div>
+  <span class="sync"><i></i> Live backend sync <b id="syncTime">just now</b></span>
+ </div>
+
+ <div class="metrics">
+
+  <article class="metric">
+   <div><span>Active shuttles</span><i class="metric-icon red">▰</i></div>
+   <strong id="activeMetric">04 <small>/ 06</small></strong>
+   <small class="metric-note"><b class="up">● Live fleet</b> on campus</small>
+  </article>
+
+  <article class="metric">
+   <div><span>Campus bus stops</span><i class="metric-icon gold">⌖</i></div>
+   <strong>12</strong>
+   <small class="metric-note">Across <b>3 shuttle routes</b></small>
+  </article>
+
+  <article class="metric">
+   <div><span>Average wait time</span><i class="metric-icon green">◷</i></div>
+   <strong id="waitMetric">4.8 <small>min</small></strong>
+   <small class="metric-note"><b class="up">↓ 12%</b> this week</small>
+  </article>
+
+  <article class="metric">
+   <div><span>Delayed services</span><i class="metric-icon rose">!</i></div>
+   <strong id="delayMetric">01</strong>
+   <small class="metric-note"><b class="warning">Needs attention</b> right now</small>
+  </article>
+
+ </div>
+
+ <div class="columns">
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Next shuttle arrivals</h3><p>Predictions based on fleet telemetry</p></div>
+    <button class="link" data-page="routes">View route schedule ↗</button>
+   </div>
+   <div id="arrivals" class="arrivals"></div>
+  </section>
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>AI system health</h3><p>GPS processing and prediction services</p></div>
+    <span class="ai-label">✦ AI ENGINE</span>
+   </div>
+
+   <div class="health">
+    <div class="health-score"><b>94<small>%</small></b><span>HEALTH</span></div>
+    <div><b>Prediction engine online</b><p>GPS cleaning and route matching are active.</p></div>
+   </div>
+
+   <div class="health-line">
+    <span>GPS signal availability</span><b id="gpsHealth">98%</b>
+    <i><em id="gpsBar" style="width:98%"></em></i>
+   </div>
+
+   <div class="health-line">
+    <span>ETA confidence (sample)</span><b>91%</b>
+    <i><em class="purple" style="width:91%"></em></i>
+   </div>
+
+   <div class="health-tip">✦
+    <span><b>Dropout recovery enabled</b><br>ETA continues using the last trusted position for up to 120 seconds.</span>
+   </div>
+  </section>
+
+ </div>
+
+ <div class="columns lower">
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Campus shuttle routes</h3><p>Choose a route to explore stops</p></div>
+    <button class="link" data-page="routes">All routes ↗</button>
+   </div>
+   <div id="routeCards" class="route-cards"></div>
+  </section>
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Campus transport notice</h3><p>Latest service update</p></div>
+    <button class="link" data-page="alerts">All alerts ↗</button>
+   </div>
+   <div id="noticePreview"></div>
+  </section>
+
+ </div>
+</section>
+
+
+<!-- LIVE TRACKING -->
+
+<section id="tracking" class="page">
+
+ <div class="page-title">
+  <div>
+   <div class="overline">CAMPUS FLEET / LIVE VIEW</div>
+   <h1>Shuttle <span>tracking.</span></h1>
+   <p>Follow campus shuttles and see predicted arrivals at every stop.</p>
+  </div>
+
+  <div class="live-chip"><i></i> LIVE TELEMETRY <b id="clock">--:--:--</b></div>
+ </div>
+
+ <div class="tracking-grid">
+
+  <div class="card map-card">
+
+   <div class="map-top">
+    <div>
+     <b>LPU campus map</b>
+     <small id="mapStatus">Loading road-following route geometry...</small>
+    </div>
+    <div>
+     <button id="fit">Fit routes</button>
+     <button id="layers">Routes ◇</button>
+    </div>
+   </div>
+
+   <div id="map" aria-label="Campus shuttle routes and locations"></div>
+
+   <div class="legend">
+    <span><i class="bus-key"></i> Shuttle</span>
+    <span><i class="stop-key"></i> Bus stop</span>
+    <span><i class="route-key"></i> Route</span>
+    <span><i class="recover-key"></i> GPS recovery</span>
+   </div>
+
+  </div>
+
+  <aside class="card fleet-card">
+
+   <div class="card-head">
+    <div><h3>Active fleet</h3><p>Select a shuttle to inspect</p></div>
+    <span class="ai-label" id="fleetCount">04 ACTIVE</span>
+   </div>
+
+   <div id="fleet"></div>
+
+   <div class="recovery">
+    <div><b>◉ GPS recovery monitor</b><span>ENABLED</span></div>
+    <p>When GPS disappears, the simulated shuttle continues using route-based position estimation.</p>
+    <div class="recovery-meta"><span>Recovery window</span><b>Up to 120 sec</b></div>
+    <button id="dropout">Test 120-second dropout ↗</button>
+   </div>
+
+  </aside>
+ </div>
+
+ <div class="card shuttle-detail" id="shuttleDetail">
+  Choose a shuttle from the map or fleet list to view stop-by-stop ETA predictions.
+ </div>
+
+</section>
+
+
+<!-- ROUTES -->
+
+<section id="routes" class="page">
+
+ <div class="page-title">
+  <div>
+   <div class="overline">TRANSPORT NETWORK</div>
+   <h1>Routes & <span>bus stops.</span></h1>
+   <p>Find the best connection across campus.</p>
+  </div>
+
+  <select id="routeFilter">
+   <option value="all">All campus routes</option>
+   <option value="RED">Red Loop</option>
+   <option value="BLUE">Blue Express</option>
+   <option value="GREEN">Green Connector</option>
+  </select>
+ </div>
+
+ <div id="routeDirectory" class="route-directory"></div>
+
+</section>
+
+
+<!-- NOTIFICATIONS -->
+
+<section id="alerts" class="page">
+
+ <div class="page-title">
+  <div>
+   <div class="overline">CAMPUS SERVICE DESK</div>
+   <h1>Alerts & <span>notices.</span></h1>
+   <p>Stay informed about service changes and shuttle delays.</p>
+  </div>
+  <button class="outline" id="readAll">Mark all read</button>
+ </div>
+
+ <div class="columns">
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Recent notifications</h3><p>Updates generated by the transport simulator</p></div>
+   </div>
+   <div id="alertsList"></div>
+  </section>
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Notification preferences</h3><p>Choose the updates you want to receive</p></div>
+   </div>
+
+   <div class="pref"><b>Shuttle delay alerts</b><label><input type="checkbox" checked><span></span></label></div>
+   <div class="pref"><b>Arrival reminders</b><label><input type="checkbox" checked><span></span></label></div>
+   <div class="pref"><b>GPS signal updates</b><label><input type="checkbox" checked><span></span></label></div>
+
+   <p class="muted">Preferences are local demo controls. Browser push notifications require HTTPS and permission.</p>
+  </section>
+
+ </div>
+
+</section>
+
+
+<!-- ANALYTICS -->
+
+<section id="analytics" class="page">
+
+ <div class="page-title">
+  <div>
+   <div class="overline">INTELLIGENCE & RELIABILITY</div>
+   <h1>AI <span>performance.</span></h1>
+   <p>Monitor data quality, prediction confidence and service reliability.</p>
+  </div>
+  <span class="ai-label">MODEL MONITORING</span>
+ </div>
+
+ <div class="metrics">
+
+  <article class="metric">
+   <div><span>GPS points processed</span><i class="metric-icon red">⌖</i></div>
+   <strong id="pointsMetric">—</strong>
+   <small class="metric-note">Demo telemetry count</small>
+  </article>
+
+  <article class="metric">
+   <div><span>Average ETA confidence</span><i class="metric-icon green">✦</i></div>
+   <strong id="confidenceMetric">—</strong>
+   <small class="metric-note">From prediction simulator</small>
+  </article>
+
+  <article class="metric">
+   <div><span>Accuracy target</span><i class="metric-icon gold">✓</i></div>
+   <strong>80<small>%</small></strong>
+   <small class="metric-note">Within ±2 min requirement</small>
+  </article>
+
+  <article class="metric">
+   <div><span>GPS recovery</span><i class="metric-icon rose">◉</i></div>
+   <strong>120<small>s</small></strong>
+   <small class="metric-note">Maximum supported demo dropout</small>
+  </article>
+
+ </div>
+
+ <div class="columns">
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Fleet GPS health</h3><p>Current availability snapshot</p></div>
+   </div>
+   <canvas id="gpsChart" height="180"></canvas>
+  </section>
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>ETA model notes</h3><p>How the prediction pipeline works</p></div>
+   </div>
+
+   <ol class="model-steps">
+    <li><b>GPS cleaning</b><span>Reject implausible jumps and smooth coordinate noise.</span></li>
+    <li><b>Map matching</b><span>Snap accepted readings to the nearest campus route segment.</span></li>
+    <li><b>ETA estimation</b><span>Combine distance, speed, dwell time and delay.</span></li>
+    <li><b>Dropout recovery</b><span>Use route-based estimation for temporary GPS interruptions.</span></li>
+   </ol>
+  </section>
+
+ </div>
+
+ <div class="disclaimer">
+  Performance figures must be validated against actual bus arrival timestamps.
+  The current campus feed is simulated, not field-validated.
+ </div>
+
+</section>
+
+
+<!-- ADMIN -->
+
+<section id="admin" class="page">
+
+ <div class="page-title">
+  <div>
+   <div class="overline">TRANSPORT OPERATIONS</div>
+   <h1>Control <span>centre.</span></h1>
+   <p>Manage the demo fleet and test GPS failure scenarios.</p>
+  </div>
+  <span class="admin-tag">ADMIN PREVIEW</span>
+ </div>
+
+ <div class="columns">
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Fleet management</h3><p>Current shuttle registry</p></div>
+    <button class="red-btn compact" id="addBus">＋ Add shuttle</button>
+   </div>
+
+   <div class="table-wrap">
+    <table>
+     <thead>
+      <tr><th>VEHICLE</th><th>ROUTE</th><th>STATUS</th><th>SOURCE</th><th></th></tr>
+     </thead>
+     <tbody id="adminTable"></tbody>
+    </table>
+   </div>
+  </section>
+
+  <section class="card">
+   <div class="card-head">
+    <div><h3>Backend service health</h3><p>API and persistence</p></div>
+    <span class="ai-label" id="apiHealth">CHECKING</span>
+   </div>
+
+   <div class="service-row"><b>Express REST API</b><span id="apiStatus">Connecting…</span></div>
+   <div class="service-row"><b>Socket.IO stream</b><span id="socketStatus">Connecting…</span></div>
+   <div class="service-row"><b>SQLite telemetry</b><span id="dbStatus">Checking…</span></div>
+   <div class="service-row"><b>Python ML service</b><span id="mlStatus">Optional · not connected</span></div>
+
+   <button class="outline full" id="checkHealth">Refresh service health</button>
+  </section>
+
+ </div>
+
+ <section class="card sim-card">
+
+  <div class="card-head">
+   <div><h3>Scenario testing</h3><p>Trigger backend events to verify system behaviour</p></div>
+   <span class="ai-label">TEST LAB</span>
+  </div>
+
+  <div class="scenario">
+   <div><b>Simulate GPS dropout</b><small>Test route-based position estimation for up to 120 seconds.</small></div>
+   <button class="outline" id="adminDropout">Run test</button>
+  </div>
+
+  <div class="scenario">
+   <div><b>Simulate shuttle delay</b><small>Apply a six-minute delay and create an alert.</small></div>
+   <button class="outline" id="adminDelay">Apply delay</button>
+  </div>
+
+  <div class="scenario">
+   <div><b>Reset sample fleet</b><small>Restart the browser demo state.</small></div>
+   <button class="outline" id="reset">Reset demo</button>
+  </div>
+
+ </section>
+
+</section>
+
+
+<footer>
+ <span>SMARTSHUTTLE AI · CAMPUS MOBILITY</span>
+ <span><i></i> Independent LPU-inspired demo · Not an official university service</span>
+ <span>© 2026</span>
+</footer>
+
+</main>
+</div>
+
+
+<div id="toast"></div>
+
+<div class="modal-bg" id="modal">
+ <div class="modal">
+  <button id="modalClose">×</button>
+  <div class="modal-mark">SS</div>
+  <h2>Add campus shuttle</h2>
+  <p>Register a vehicle in the demo fleet.</p>
+
+  <label>Shuttle ID<input id="newId" placeholder="e.g. LPU-05"></label>
+
+  <label>Assign route
+   <select id="newRoute">
+    <option value="RED">Red Loop</option>
+    <option value="BLUE">Blue Express</option>
+    <option value="GREEN">Green Connector</option>
+   </select>
+  </label>
+
+  <button class="red-btn full" id="saveBus">Add to fleet →</button>
+ </div>
+</div>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<!-- MOCK API AND SIMULATION -->
+
+<script>
+(()=>{
+ const routeData=[
+  {
+   id:"RED",
+   name:"Red Loop",
+   color:"#2563EB",
+   stops:["Main Entrance","Academic Block","Uni Mall","Central Library","Hostel Gate"],
+   coords:[
+    [31.2551,75.7043],
+    [31.25605,75.7061],
+    [31.25715,75.70515],
+    [31.2565,75.70295],
+    [31.2548,75.7023]
+   ]
+  },
+  {
+   id:"BLUE",
+   name:"Blue Express",
+   color:"#0EA5C7",
+   stops:["Hostel Gate","Sports Complex","Auditorium","Academic Block"],
+   coords:[
+    [31.2548,75.7023],
+    [31.2533,75.7041],
+    [31.25455,75.70645],
+    [31.25605,75.7061]
+   ]
+  },
+  {
+   id:"GREEN",
+   name:"Green Connector",
+   color:"#159B79",
+   stops:["North Parking","Uni Mall","Central Library","Medical Centre"],
+   coords:[
+    [31.2581,75.704],
+    [31.25715,75.70515],
+    [31.2565,75.70295],
+    [31.25395,75.7017]
+   ]
+  }
+ ];
+
+ let buses=[
+  {id:"LPU-01",route:"RED",progress:.12,speed:22,delay:0,source:"SIMULATED"},
+  {id:"LPU-02",route:"BLUE",progress:.43,speed:19,delay:0,source:"SIMULATED"},
+  {id:"LPU-03",route:"RED",progress:.69,speed:14,delay:360,source:"SIMULATED"},
+  {id:"LPU-04",route:"GREEN",progress:.28,speed:25,delay:0,source:"SIMULATED"}
+ ];
+
+ let alerts=[
+  {
+   id:1,
+   shuttle_id:"LPU-03",
+   level:"warning",
+   title:"LPU-03 is running late",
+   message:"Red Loop: estimated delay 6 minutes. Next stop: Central Library.",
+   created_at:Date.now(),
+   read:0
+  }
+ ];
+
+ let dropouts={};
+ let listeners={};
+ let aid=2;
+ let gpsPointCount=0;
+
+ const rad=x=>x*Math.PI/180;
+
+ function distanceBetween(a,b){
+  const R=6371000;
+  const dLat=rad(b[0]-a[0]);
+  const dLng=rad(b[1]-a[1]);
+  const x=
+   Math.sin(dLat/2)**2+
+   Math.cos(rad(a[0]))*Math.cos(rad(b[0]))*Math.sin(dLng/2)**2;
+  return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+ }
+
+ function routePath(r){
+  return r.roadCoords?.length>1?r.roadCoords:r.coords;
+ }
+
+ function getPathLength(r){
+  const pts=routePath(r);
+  let total=0;
+  for(let i=0;i<pts.length-1;i++){
+   total+=distanceBetween(pts[i],pts[i+1]);
+  }
+  return total;
+ }
+
+ function pointAlong(r,progress){
+  const pts=routePath(r);
+  const total=getPathLength(r);
+  let remaining=Math.max(0,Math.min(1,progress))*total;
+
+  for(let i=0;i<pts.length-1;i++){
+   const d=distanceBetween(pts[i],pts[i+1]);
+
+   if(remaining<=d){
+    const t=remaining/(d||1);
+    return {
+     lat:pts[i][0]+(pts[i+1][0]-pts[i][0])*t,
+     lng:pts[i][1]+(pts[i+1][1]-pts[i][1])*t
+    };
+   }
+
+   remaining-=d;
+  }
+
+  return {lat:pts[pts.length-1][0],lng:pts[pts.length-1][1]};
+ }
+
+ function progressAtPoint(route,point){
+  const pts=routePath(route);
+  const total=getPathLength(route);
+  let accumulated=0;
+  let bestDistance=Infinity;
+  let bestProgress=0;
+
+  for(let i=0;i<pts.length;i++){
+   const d=distanceBetween(point,pts[i]);
+   if(d<bestDistance){
+    bestDistance=d;
+    bestProgress=total?(accumulated/total):0;
+   }
+
+   if(i<pts.length-1){
+    accumulated+=distanceBetween(pts[i],pts[i+1]);
+   }
+  }
+
+  return bestProgress;
+ }
+
+ function prepareStopProgress(r){
+  const stops=r.snappedStops||r.coords;
+
+  let values=stops.map(p=>progressAtPoint(r,p));
+
+  if(values.length){
+   values[0]=0;
+   values[values.length-1]=1;
+  }
+
+  for(let i=1;i<values.length;i++){
+   values[i]=Math.max(values[i],values[i-1]+0.0001);
+  }
+
+  r.stopProgress=values;
+ }
+
+ function next(b){
+  const r=routeData.find(x=>x.id===b.route);
+  const progress=r.stopProgress||r.coords.map((_,i)=>i/(r.coords.length-1));
+
+  let i=progress.findIndex((p,index)=>index>0&&p>b.progress+0.002);
+
+  if(i===-1)i=r.stops.length-1;
+
+  return {r,i};
+ }
+
+ function snapshot(){
+  const shuttles=buses.map(b=>{
+   const {r,i}=next(b);
+   const isDropout=!!dropouts[b.id]&&dropouts[b.id]>Date.now();
+
+   const length=getPathLength(r);
+   const stopProgress=(r.stopProgress||[])[i]??1;
+   const remainingDistance=Math.max(0,(stopProgress-b.progress)*length);
+
+   const speedMs=Math.max(7,b.speed)/3.6;
+   const travelSeconds=remainingDistance/speedMs;
+   const etaSeconds=Math.max(15,Math.round(travelSeconds+Math.max(0,b.delay)));
+
+   const upcoming=r.stops.slice(i).map((stop,j)=>{
+    const stopIndex=i+j;
+    const stopPosition=(r.stopProgress||[])[stopIndex]??1;
+    const distance=Math.max(0,(stopPosition-b.progress)*length);
+    const dwell=j*18;
+    const seconds=distance/speedMs+Math.max(0,b.delay)+dwell;
+
+    return {
+     stop,
+     etaMinutes:Math.max(0,Math.ceil(seconds/60)),
+     confidence:isDropout?.73:.91
+    };
+   });
+
+   return {
+    id:b.id,
+    route:b.route,
+    routeName:r.name,
+    position:pointAlong(r,b.progress),
+    progress:b.progress,
+    speed:b.speed,
+    status:b.delay>0?"Delayed":"On time",
+    delaySeconds:b.delay,
+    gpsStatus:isDropout?"Estimated":"Strong",
+    gpsDropout:isDropout,
+    lastGpsAt:Date.now(),
+    source:b.source,
+    nextStop:r.stops[i],
+    etaSeconds,
+    etaMinutes:Math.ceil(etaSeconds/60),
+    confidence:isDropout?.73:.91,
+    etaModel:"Demo route-distance ETA",
+    upcoming
+   };
+  });
+
+  return {
+   shuttles,
+   routes:routeData,
+   serverTime:Date.now(),
+   mode:"DEMO GPS FEED",
+   metrics:{
+    active:shuttles.length,
+    delayed:shuttles.filter(x=>x.status==="Delayed").length,
+    gpsHealth:Math.round(shuttles.filter(x=>!x.gpsDropout).length/Math.max(1,shuttles.length)*100),
+    etaTarget:80,
+    gpsPoints:gpsPointCount
+   }
+  };
+ }
+
+ function emit(){
+  const data=snapshot();
+  (listeners["fleet:update"]||[]).forEach(fn=>fn(data));
+ }
+
+ window.io=()=>({
+  connected:true,
+  on:(name,fn)=>{
+   (listeners[name]??=[]).push(fn);
+   if(name==="connect")setTimeout(fn,30);
+   if(name==="fleet:update")setTimeout(()=>fn(snapshot()),30);
+   return this;
+  }
+ });
+
+ const nativeFetch=window.fetch.bind(window);
+
+ window.fetch=async(url,opts={})=>{
+  if(typeof url!=="string"||!url.startsWith("/api/")){
+   return nativeFetch(url,opts);
+  }
+
+  const method=(opts.method||"GET").toUpperCase();
+  const body=opts.body?JSON.parse(opts.body):{};
+  const parts=url.split("/").filter(Boolean);
+
+  let data={},status=200;
+
+  if(url==="/api/state"){
+   data=snapshot();
+  }
+  else if(url==="/api/routes"){
+   data=routeData;
+  }
+  else if(url==="/api/health"){
+   data={
+    ok:true,
+    service:"SmartShuttle browser preview",
+    database:"Demo memory store",
+    ai:"Demo estimator",
+    time:Date.now()
+   };
+  }
+  else if(url==="/api/alerts"){
+   data=alerts;
+  }
+  else if(url==="/api/analytics"){
+   data={
+    gpsPoints:gpsPointCount,
+    avgEtaSeconds:385,
+    confidence:89,
+    target:80
+   };
+  }
+  else if(parts[1]==="simulate"&&parts[2]==="dropout"&&method==="POST"){
+   const id=parts[3];
+
+   if(!buses.some(x=>x.id===id)){
+    status=404;
+    data={error:"Unknown shuttle"};
+   }else{
+    dropouts[id]=Date.now()+Math.min(120,body.seconds||120)*1000;
+    data={ok:true};
+    emit();
+   }
+  }
+  else if(parts[1]==="simulate"&&parts[2]==="delay"&&method==="POST"){
+   const id=parts[3];
+   const b=buses.find(x=>x.id===id);
+
+   if(!b){
+    status=404;
+    data={error:"Unknown shuttle"};
+   }else{
+    b.delay=body.delaySeconds||360;
+
+    alerts.unshift({
+     id:aid++,
+     shuttle_id:id,
+     level:"warning",
+     title:`${id} is running late`,
+     message:`${b.route} service: an additional ${Math.round(b.delay/60)} minutes is expected.`,
+     created_at:Date.now(),
+     read:0
+    });
+
+    data={ok:true};
+    emit();
+   }
+  }
+  else if(parts[1]==="alerts"&&parts[2]&&parts[3]==="read"&&method==="POST"){
+   const a=alerts.find(x=>x.id===Number(parts[2]));
+   if(a)a.read=1;
+   data={ok:true};
+  }
+  else if(url==="/api/admin/shuttles"&&method==="POST"){
+   if(buses.some(x=>x.id===body.id)){
+    status=400;
+    data={error:"Shuttle ID already exists"};
+   }else if(!routeData.some(r=>r.id===body.route)){
+    status=400;
+    data={error:"Invalid route"};
+   }else{
+    buses.push({
+     id:body.id,
+     route:body.route,
+     progress:.08,
+     speed:20,
+     delay:0,
+     source:"SIMULATED"
+    });
+
+    data={ok:true};
+    emit();
+   }
+  }
+  else if(parts[1]==="admin"&&parts[2]==="shuttles"&&parts[3]&&method==="DELETE"){
+   buses=buses.filter(x=>x.id!==parts[3]);
+   data={ok:true};
+   emit();
+  }
+  else{
+   status=404;
+   data={error:"Demo API endpoint not found"};
+  }
+
+  return {
+   ok:status<400,
+   status,
+   json:async()=>data
+  };
+ };
+
+ // GPS simulation continues along the route during a dropout.
+ // The frontend labels that position as ESTIMATED, not LIVE.
+
+ setInterval(()=>{
+  buses.forEach(b=>{
+   b.progress+=.0025;
+
+   if(b.progress>=1){
+    b.progress=0;
+   }
+
+   if(b.delay>0){
+    b.delay=Math.max(0,b.delay-1);
+   }
+
+   gpsPointCount++;
+  });
+
+  emit();
+ },2500);
+
+})();
+</script>
+
+
+<!-- MAIN APPLICATION -->
+
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+
+let state=null;
+let routes=[];
+let map=null;
+let markers={};
+let routeLines=[];
+let stopMarkers=[];
+let progressLines={};
+let selected="LPU-01";
+let socket=null;
+let chart=null;
+let routeVisibility=true;
+let mapBounds=null;
+let routeLoadFinished=false;
+
+const toast=m=>{
+ const t=$("#toast");
+ t.textContent=m;
+ t.classList.add("show");
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>t.classList.remove("show"),3000);
+};
+
+async function api(url,options={}){
+ const r=await fetch(url,{
+  headers:{"Content-Type":"application/json"},
+  ...options
+ });
+
+ if(!r.ok){
+  throw new Error((await r.json()).error||"Request failed");
+ }
+
+ return r.json();
+}
+
+function nav(page){
+ $$(".page").forEach(x=>x.classList.toggle("show",x.id===page));
+
+ $$(".nav").forEach(x=>{
+  x.classList.toggle("active",x.dataset.page===page);
+ });
+
+ $("#crumb").textContent=({
+  dashboard:"Overview",
+  tracking:"Live shuttle tracking",
+  routes:"Routes & bus stops",
+  alerts:"Alerts & notices",
+  analytics:"AI performance",
+  admin:"Transport control"
+ })[page];
+
+ $("#sidebar").classList.remove("open");
+
+ if(page==="tracking"&&map){
+  setTimeout(()=>map.invalidateSize(),150);
+ }
+
+ if(page==="analytics")loadAnalytics();
+ if(page==="alerts")loadAlerts();
+ if(page==="admin")checkHealth();
+
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+$$("[data-page]").forEach(b=>{
+ b.addEventListener("click",()=>nav(b.dataset.page));
+});
+
+$("#menu").onclick=()=>$("#sidebar").classList.toggle("open");
+
+$("#theme").onclick=()=>{
+ document.body.classList.toggle("dark");
+ toast("Display theme updated");
+};
+
+$("#help").onclick=()=>{
+ toast("GPS → road matching → ETA prediction → student notification");
+};
+
+function fmtEta(n){
+ return n<=1?"< 1 min":`${n} min`;
+}
+
+
+// ============================================
+// GEOGRAPHIC ROUTE UTILITIES
+// ============================================
+
+function haversine(a,b){
+ const R=6371000;
+ const rad=x=>x*Math.PI/180;
+ const dLat=rad(b[0]-a[0]);
+ const dLng=rad(b[1]-a[1]);
+
+ const v=
+  Math.sin(dLat/2)**2+
+  Math.cos(rad(a[0]))*
+  Math.cos(rad(b[0]))*
+  Math.sin(dLng/2)**2;
+
+ return 2*R*Math.atan2(Math.sqrt(v),Math.sqrt(1-v));
+}
+
+function getRoutePath(route){
+ return route?.roadCoords?.length>1
+  ?route.roadCoords
+  :route?.coords||[];
+}
+
+function getRouteDistance(route){
+ const pts=getRoutePath(route);
+ let total=0;
+
+ for(let i=0;i<pts.length-1;i++){
+  total+=haversine(pts[i],pts[i+1]);
+ }
+
+ return total;
+}
+
+
+// Position at a distance percentage along the road geometry.
+
+function routePixelPoint(routeId,progress){
+ const route=routes.find(r=>r.id===routeId);
+
+ if(!route)return [31.2551,75.7043];
+
+ const pts=getRoutePath(route);
+
+ if(pts.length<2)return pts[0]||[31.2551,75.7043];
+
+ const total=getRouteDistance(route);
+ let remaining=Math.max(0,Math.min(1,progress))*total;
+
+ for(let i=0;i<pts.length-1;i++){
+  const length=haversine(pts[i],pts[i+1]);
+
+  if(remaining<=length){
+   const t=remaining/(length||1);
+
+   return [
+    pts[i][0]+(pts[i+1][0]-pts[i][0])*t,
+    pts[i][1]+(pts[i+1][1]-pts[i][1])*t
+   ];
+  }
+
+  remaining-=length;
+ }
+
+ return pts[pts.length-1];
+}
+
+
+// Calculate the section of road already travelled.
+
+function getTravelledPath(routeId,progress){
+ const route=routes.find(r=>r.id===routeId);
+
+ if(!route)return [];
+
+ const pts=getRoutePath(route);
+ const total=getRouteDistance(route);
+
+ if(pts.length<2||total===0)return pts;
+
+ const result=[pts[0]];
+ let remaining=Math.max(0,Math.min(1,progress))*total;
+
+ for(let i=0;i<pts.length-1;i++){
+  const segment=haversine(pts[i],pts[i+1]);
+
+  if(remaining>=segment){
+   result.push(pts[i+1]);
+   remaining-=segment;
+  }else{
+   const t=remaining/(segment||1);
+
+   result.push([
+    pts[i][0]+(pts[i+1][0]-pts[i][0])*t,
+    pts[i][1]+(pts[i+1][1]-pts[i][1])*t
+   ]);
+
+   break;
+  }
+ }
+
+ return result;
+}
+
+
+// ============================================
+// DYNAMIC ROAD ROUTING — OSRM
+// ============================================
+
+async function fetchDynamicRoute(route){
+
+ const coordinates=route.coords
+  .map(([lat,lng])=>`${lng},${lat}`)
+  .join(";");
+
+ const url=
+  `https://router.project-osrm.org/route/v1/driving/${coordinates}`+
+  `?overview=full&geometries=geojson&steps=false`;
+
+ const response=await fetch(url);
+
+ if(!response.ok){
+  throw new Error(`OSRM HTTP error ${response.status}`);
+ }
+
+ const result=await response.json();
+
+ if(
+  result.code!=="Ok"||
+  !result.routes?.length||
+  !result.routes[0].geometry?.coordinates
+ ){
+  throw new Error("No valid road geometry returned");
+ }
+
+ const roadCoords=result.routes[0].geometry.coordinates
+  .map(([lng,lat])=>[lat,lng]);
+
+ if(roadCoords.length<2){
+  throw new Error("Insufficient road coordinates");
+ }
+
+ route.roadCoords=roadCoords;
+
+ // OSRM provides snapped waypoint coordinates.
+
+ route.snappedStops=result.waypoints?.map(w=>[
+  w.location[1],
+  w.location[0]
+ ])||route.coords;
+
+ route.roadDistance=result.routes[0].distance;
+ route.roadDuration=result.routes[0].duration;
+ route.routingSource="OSRM road geometry";
+
+ return roadCoords;
+}
+
+
+// Find the closest progress percentage for every route stop.
+
+function nearestProgressOnPath(target,path){
+
+ let bestDistance=Infinity;
+ let bestIndex=0;
+ let total=0;
+ let distanceAtBest=0;
+
+ const cumulative=[0];
+
+ for(let i=1;i<path.length;i++){
+  total+=haversine(path[i-1],path[i]);
+  cumulative.push(total);
+ }
+
+ for(let i=0;i<path.length;i++){
+  const d=haversine(target,path[i]);
+
+  if(d<bestDistance){
+   bestDistance=d;
+   bestIndex=i;
+   distanceAtBest=cumulative[i];
+  }
+ }
+
+ return total>0?distanceAtBest/total:0;
+}
+
+function prepareRouteStops(route){
+
+ const path=getRoutePath(route);
+ const stopPoints=route.snappedStops||route.coords;
+
+ let values=stopPoints.map(point=>
+  nearestProgressOnPath(point,path)
+ );
+
+ if(values.length){
+  values[0]=0;
+  values[values.length-1]=1;
+ }
+
+ for(let i=1;i<values.length;i++){
+  values[i]=Math.max(values[i],values[i-1]+.00001);
+ }
+
+ route.stopProgress=values;
+}
+
+
+// Request road geometry once per route, not on every GPS update.
+
+async function loadRoadRoutes(){
+
+ let failures=[];
+
+ for(let i=0;i<routes.length;i++){
+
+  const route=routes[i];
+
+  try{
+   await fetchDynamicRoute(route);
+   route.routingSource="OSRM road geometry";
+
+   console.log("Dynamic route loaded:",route.name);
+
+  }catch(error){
+
+   console.warn("Road routing unavailable:",route.name,error);
+
+   route.roadCoords=route.coords;
+   route.snappedStops=route.coords;
+   route.routingSource="Coordinate fallback";
+
+   failures.push(route.name);
+  }
+
+  prepareRouteStops(route);
+
+  // Keep requests spaced for the public demo routing service.
+
+  if(i<routes.length-1){
+   await new Promise(resolve=>setTimeout(resolve,1200));
+  }
+ }
+
+ routeLoadFinished=true;
+
+ if($("#mapStatus")){
+  $("#mapStatus").textContent=failures.length
+   ?`Fallback geometry used for: ${failures.join(", ")}`
+   :"Road-following geometry loaded · Demo coordinates";
+ }
+}
+
+
+// ============================================
+// DASHBOARD RENDERING
+// ============================================
+
+function render(s){
+
+ state=s;
+
+ // Keep the latest server route records while preserving
+ // the road geometry already calculated by the frontend.
+
+ s.routes.forEach(newRoute=>{
+  const old=routes.find(r=>r.id===newRoute.id);
+
+  if(old){
+   newRoute.roadCoords=old.roadCoords||newRoute.coords;
+   newRoute.snappedStops=old.snappedStops||newRoute.coords;
+   newRoute.routingSource=old.routingSource||"Coordinate fallback";
+   newRoute.stopProgress=old.stopProgress||newRoute.coords.map((_,i)=>i/(newRoute.coords.length-1));
+  }
+ });
+
+ routes=s.routes;
+
+ const buses=s.shuttles;
+
+ $("#activeMetric").innerHTML=
+  `${String(buses.length).padStart(2,"0")} <small>/ 06</small>`;
+
+ $("#delayMetric").textContent=
+  String(buses.filter(x=>x.status==="Delayed").length).padStart(2,"0");
+
+ $("#gpsHealth").textContent=s.metrics.gpsHealth+"%";
+ $("#gpsBar").style.width=s.metrics.gpsHealth+"%";
+ $("#syncTime").textContent="just now";
+ $("#fleetCount").textContent=`${buses.length} ACTIVE`;
+
+ $("#arrivals").innerHTML=buses.slice(0,4).map(b=>`
+  <div class="arrival">
+   <div class="bus-icon">▰</div>
+   <div>
+    <b>${b.id} · ${b.routeName}</b>
+    <small>${b.nextStop} · ${b.gpsStatus}</small>
+   </div>
+   <div class="eta">
+    <strong>${fmtEta(b.etaMinutes)}</strong>
+    <small>next stop</small>
+    <span class="pill ${b.status==="Delayed"?"late":""}">${b.status}</span>
+   </div>
+  </div>
+ `).join("");
+
+ $("#routeCards").innerHTML=routes.map(r=>`
+  <div class="route-mini" data-route="${r.id}">
+   <b><i class="route-color" style="background:${r.color}"></i>${r.name}</b>
+   <small>${r.stops.length} stops</small>
+   <strong>${Math.round((r.roadDuration||r.stops.length*180)/60)} min</strong>
+  </div>
+ `).join("");
+
+ $$(".route-mini").forEach(x=>{
+  x.onclick=()=>{
+   nav("routes");
+   $("#routeFilter").value=x.dataset.route;
+   renderRoutes();
+  };
+ });
+
+ const delayed=buses.find(b=>b.status==="Delayed");
+
+ $("#noticePreview").innerHTML=`
+  <div class="notice">
+   <span class="notice-icon">!</span>
+   <div>
+    <b>${delayed?.id||"Fleet"} service update</b>
+    <p>${delayed
+      ?"A shuttle is delayed. Check live predictions before leaving."
+      :"All campus shuttle services are on schedule."}
+    </p>
+   </div>
+  </div>
+ `;
+
+ renderFleet();
+ renderRoutes();
+ renderAdmin();
+
+ if(map)renderMap(s);
+
+ if(!selected||!buses.some(b=>b.id===selected)){
+  selected=buses[0]?.id;
+ }
+
+ selectShuttle(selected);
+
+}
+
+
+// ============================================
+// FLEET RENDERING
+// ============================================
+
+function renderFleet(){
+
+ const buses=state?.shuttles||[];
+
+ $("#fleet").innerHTML=buses.map(b=>`
+  <div class="fleet-item" data-id="${b.id}">
+   <div class="fleet-icon">▰</div>
+   <div class="fleet-name">
+    <b>${b.id} · ${b.route}</b>
+    <small>${b.nextStop} · ${b.gpsStatus}</small>
+   </div>
+   <div class="fleet-eta">
+    <b>${fmtEta(b.etaMinutes)}</b>
+    <small>${b.status}</small>
+   </div>
+  </div>
+ `).join("");
+
+ $$(".fleet-item").forEach(x=>{
+  x.onclick=()=>selectShuttle(x.dataset.id);
+ });
+
+}
+
+
+// ============================================
+// SHUTTLE DETAILS
+// ============================================
+
+function selectShuttle(id){
+
+ selected=id;
+
+ const b=state?.shuttles.find(x=>x.id===id);
+
+ if(!b)return;
+
+ $("#shuttleDetail").innerHTML=`
+  <div class="detail-grid">
+   <div>
+    <b>${b.id} · ${b.routeName}</b>
+    <small>${b.status} · ${b.source} feed</small>
+   </div>
+
+   <div>
+    <b>${fmtEta(b.etaMinutes)}</b>
+    <small>Next stop · ${b.nextStop}</small>
+   </div>
+
+   <div>
+    <b>${Math.round(b.confidence*100)}%</b>
+    <small>Prediction confidence</small>
+   </div>
+
+   <div>
+    <b>${b.gpsStatus}</b>
+    <small>${b.gpsDropout?"Position is estimated":"GPS signal status"}</small>
+   </div>
+
+   <div>
+    <b>${b.etaModel||"Adaptive fallback"}</b>
+    <small>ETA prediction engine</small>
+   </div>
+  </div>
+
+  <div style="margin-top:15px">
+   <b style="font-size:9px">Predicted arrivals</b>
+   <div class="eta-stops">
+    ${b.upcoming.slice(0,4).map(x=>`
+     <span style="display:inline-block;margin:9px 16px 0 0;font-size:8px;color:#7d8998">
+      ${x.stop} <b style="color:#2563EB">${x.etaMinutes}m</b>
+     </span>
+    `).join("")}
+   </div>
+  </div>
+ `;
+
+ if(map&&markers[id]){
+  map.setView(routePixelPoint(b.route,b.progress),17);
+  markers[id].openPopup();
+ }
+
+}
+
+
+// ============================================
+// ROUTE DIRECTORY
+// ============================================
+
+function renderRoutes(){
+
+ const filter=$("#routeFilter").value;
+
+ $("#routeDirectory").innerHTML=routes
+  .filter(r=>filter==="all"||r.id===filter)
+  .map(r=>`
+   <article class="route-detail">
+
+    <div class="route-detail-head">
+     <div class="route-name">
+      <div class="route-symbol" style="background:${r.color}18;color:${r.color}">↗</div>
+      <div>
+       <b>${r.name}</b>
+       <small>Campus shuttle service · ${r.id}</small>
+      </div>
+     </div>
+     <span>● ACTIVE</span>
+    </div>
+
+    <div class="route-meta">
+     <span>STOPS<b>${r.stops.length}</b></span>
+     <span>DISTANCE<b>${((r.roadDistance||0)/1000).toFixed(2)||"—"} km</b></span>
+     <span>EST. DURATION<b>${Math.round((r.roadDuration||0)/60)||"—"} min</b></span>
+    </div>
+
+    ${r.stops.map((stop,i)=>`
+     <div class="stop">
+      <i style="border-color:${r.color}"></i>
+      <span>${stop}</span>
+      <small>${i===0?"First stop":i===r.stops.length-1?"Last stop":`Stop 0${i+1}`}</small>
+     </div>
+    `).join("")}
+
+    <p class="muted">${r.routingSource||"Loading route geometry"}</p>
+   </article>
+  `).join("");
+}
+
+$("#routeFilter").onchange=renderRoutes;
+
+
+// ============================================
+// DYNAMIC MAP RENDERING
+// ============================================
+
+function busIcon(b){
+
+ return L.divIcon({
+
+  className:"",
+
+  html:`
+   <div class="bus-marker
+    ${b.status==="Delayed"?"delayed":""}
+    ${b.gpsDropout?"recover":""}">
+    ▰
+   </div>
+  `,
+
+  iconSize:[25,25],
+  iconAnchor:[12,12]
+ });
+}
+
+
+function drawRouteLayers(){
+
+ if(!map)return;
+
+ routeLines.forEach(line=>map.removeLayer(line));
+ stopMarkers.forEach(marker=>map.removeLayer(marker));
+
+ routeLines=[];
+ stopMarkers=[];
+
+ mapBounds=L.latLngBounds([]);
+
+ routes.forEach(route=>{
+
+  const path=getRoutePath(route);
+
+  path.forEach(point=>mapBounds.extend(point));
+
+  // Main road-following line.
+
+  const routeLine=L.polyline(path,{
+   color:route.color,
+   weight:6,
+   opacity:.60,
+   lineCap:"round",
+   lineJoin:"round",
+   interactive:true
+  });
+
+  if(routeVisibility){
+   routeLine.addTo(map);
+  }
+
+  routeLine.bindPopup(`
+   <b>${route.name}</b><br>
+   ${route.stops.length} stops<br>
+   ${route.routingSource}
+  `);
+
+  routeLines.push(routeLine);
+
+
+  // Stop markers are positioned at snapped locations.
+
+  const stopPoints=route.snappedStops||route.coords;
+
+  route.stops.forEach((name,i)=>{
+
+   const point=stopPoints[i];
+
+   if(!point)return;
+
+   const marker=L.marker(point,{
+    icon:L.divIcon({
+     className:"",
+     html:'<div class="stop-marker"></div>',
+     iconSize:[10,10],
+     iconAnchor:[5,5]
+    })
+   });
+
+   if(routeVisibility){
+    marker.addTo(map);
+   }
+
+   marker.bindPopup(`
+    <b>${name}</b><br>
+    ${route.name} stop
+   `);
+
+   stopMarkers.push(marker);
+
+  });
+
+ });
+
+}
+
+
+// Add shuttle markers and update their travelled road section.
+
+function renderMap(s){
+
+ if(!map||!window.L)return;
+
+ const activeIds=new Set(s.shuttles.map(b=>b.id));
+
+ // Remove deleted vehicle markers.
+
+ Object.keys(markers).forEach(id=>{
+
+  if(!activeIds.has(id)){
+
+   map.removeLayer(markers[id]);
+   delete markers[id];
+
+   if(progressLines[id]){
+    map.removeLayer(progressLines[id]);
+    delete progressLines[id];
+   }
+  }
+
+ });
+
+
+ s.shuttles.forEach(bus=>{
+
+  // Position comes from road geometry, not the straight line
+  // between two campus stops.
+
+  const position=routePixelPoint(bus.route,bus.progress);
+
+  // Create or update bus marker.
+
+  if(!markers[bus.id]){
+
+   markers[bus.id]=L.marker(position,{
+    icon:busIcon(bus),
+    zIndexOffset:1000
+   }).addTo(map);
+
+   markers[bus.id].on("click",()=>{
+    selectShuttle(bus.id);
+   });
+
+  }else{
+
+   markers[bus.id].setLatLng(position);
+   markers[bus.id].setIcon(busIcon(bus));
+
+  }
+
+  markers[bus.id].bindPopup(`
+   <b>${bus.id} · ${bus.routeName}</b><br>
+   ${bus.etaMinutes} min to ${bus.nextStop}<br>
+   GPS status: ${bus.gpsStatus}<br>
+   <small>${bus.source} feed</small>
+  `);
+
+
+  // Draw the path already travelled.
+
+  const travelled=getTravelledPath(
+   bus.route,
+   bus.progress
+  );
+
+  if(!progressLines[bus.id]){
+
+   progressLines[bus.id]=L.polyline(travelled,{
+    color:"#2563EB",
+    weight:7,
+    opacity:.95,
+    lineCap:"round",
+    lineJoin:"round",
+    interactive:false
+   });
+
+   if(routeVisibility){
+    progressLines[bus.id].addTo(map);
+   }
+
+  }else{
+
+   progressLines[bus.id].setLatLngs(travelled);
+
+  }
+
+  if(routeVisibility&&!map.hasLayer(progressLines[bus.id])){
+   progressLines[bus.id].addTo(map);
+  }
+
+  if(!routeVisibility&&map.hasLayer(progressLines[bus.id])){
+   map.removeLayer(progressLines[bus.id]);
+  }
+
+ });
+
+}
+
+
+// ============================================
+// INITIALIZE LEAFLET
+// ============================================
+
+function initMap(){
+
+ if(!window.L||map)return;
+
+ map=L.map("map",{
+  minZoom:13,
+  maxZoom:19,
+  zoomControl:true,
+  preferCanvas:true
+ });
+
+ L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+   maxZoom:19,
+   attribution:"© OpenStreetMap contributors"
+  }
+ ).addTo(map);
+
+ drawRouteLayers();
+
+ if(mapBounds?.isValid()){
+  map.fitBounds(mapBounds.pad(.12));
+ }
+
+ if(state){
+  renderMap(state);
+ }
+
+}
+
+
+// ============================================
+// MAP CONTROLS
+// ============================================
+
+$("#fit").onclick=()=>{
+
+ if(map&&mapBounds?.isValid()){
+  map.fitBounds(mapBounds.pad(.12));
+ }
+
+};
+
+$("#layers").onclick=()=>{
+
+ routeVisibility=!routeVisibility;
+
+ const allLayers=[
+  ...routeLines,
+  ...stopMarkers,
+  ...Object.values(progressLines)
+ ];
+
+ allLayers.forEach(layer=>{
+
+  if(routeVisibility&&!map.hasLayer(layer)){
+   layer.addTo(map);
+  }
+
+  if(!routeVisibility&&map.hasLayer(layer)){
+   map.removeLayer(layer);
+  }
+
+ });
+
+ toast(routeVisibility?"Routes visible":"Routes hidden");
+};
+
+
+// ============================================
+// GPS DROPOUT TEST
+// ============================================
+
+async function simulateDropout(){
+
+ const id=selected||state?.shuttles[0]?.id;
+
+ if(!id)return;
+
+ try{
+
+  await api(`/api/simulate/dropout/${id}`,{
+   method:"POST",
+   body:JSON.stringify({seconds:120})
+  });
+
+  toast(`${id}: GPS dropout simulated. Position is estimated.`);
+
+ }catch(error){
+
+  toast(error.message);
+
+ }
+
+}
+
+$("#dropout").onclick=simulateDropout;
+$("#adminDropout").onclick=simulateDropout;
+
+
+// ============================================
+// DELAY SIMULATION
+// ============================================
+
+$("#adminDelay").onclick=async()=>{
+
+ const bus=state?.shuttles.find(x=>x.id==="LPU-03")
+  ||state?.shuttles[0];
+
+ if(!bus)return;
+
+ try{
+
+  await api(`/api/simulate/delay/${bus.id}`,{
+   method:"POST",
+   body:JSON.stringify({delaySeconds:360})
+  });
+
+  toast(`Six-minute delay applied to ${bus.id}.`);
+
+ }catch(error){
+
+  toast(error.message);
+
+ }
+
+};
+
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+async function loadAlerts(){
+
+ try{
+
+  const alerts=await api("/api/alerts");
+
+  $("#alertsList").innerHTML=alerts.length
+   ?alerts.map(a=>`
+     <div class="notification ${a.read?"":"unread"}">
+      <div class="notification-icon">${a.level==="warning"?"!":"↗"}</div>
+      <div>
+       <b>${a.title}</b>
+       <p>${a.message}</p>
+       <small>${new Date(a.created_at).toLocaleString()}</small>
+      </div>
+     </div>
+    `).join("")
+   :'<p class="muted">No alerts yet.</p>';
+
+  $("#alertBadge").textContent=
+   alerts.filter(a=>!a.read).length||"";
+
+ }catch(error){
+
+  console.warn("Alert loading error:",error);
+
+ }
+
+}
+
+$("#readAll").onclick=async()=>{
+
+ try{
+
+  const alerts=await api("/api/alerts");
+
+  await Promise.all(
+   alerts
+    .filter(a=>!a.read)
+    .map(a=>api(`/api/alerts/${a.id}/read`,{method:"POST"}))
+  );
+
+  await loadAlerts();
+
+  toast("Notifications marked as read");
+
+ }catch(error){
+
+  toast(error.message);
+
+ }
+
+};
+
+
+// ============================================
+// ANALYTICS
+// ============================================
+
+async function loadAnalytics(){
+
+ try{
+
+  const data=await api("/api/analytics");
+
+  $("#pointsMetric").textContent=data.gpsPoints??0;
+  $("#confidenceMetric").textContent=(data.confidence??0)+"%";
+
+  if(chart)chart.destroy();
+
+  if(window.Chart){
+
+   chart=new Chart($("#gpsChart"),{
+
+    type:"bar",
+
+    data:{
+     labels:["Current fleet"],
+
+     datasets:[{
+      data:[state?.metrics.gpsHealth||0],
+      backgroundColor:["#2563EB"],
+      borderRadius:5,
+      barThickness:42
+     }]
+    },
+
+    options:{
+     responsive:true,
+     plugins:{
+      legend:{display:false}
+     },
+
+     scales:{
+      y:{
+       min:0,
+       max:100,
+       ticks:{
+        callback:v=>v+"%"
+       }
+      },
+      x:{
+       grid:{display:false}
+      }
+     }
+    }
+
+   });
+
+  }
+
+ }catch(error){
+
+  console.warn("Analytics error:",error);
+
+ }
+
+}
+
+
+// ============================================
+// ADMIN FLEET TABLE
+// ============================================
+
+function renderAdmin(){
+
+ if(!state)return;
+
+ $("#adminTable").innerHTML=state.shuttles.map(bus=>`
+  <tr>
+   <td><b>${bus.id}</b></td>
+   <td>${bus.route}</td>
+   <td><span class="table-status ${bus.status==="Delayed"?"late":""}">${bus.status}</span></td>
+   <td>${bus.source}</td>
+   <td><button class="table-action" data-remove="${bus.id}">Remove</button></td>
+  </tr>
+ `).join("");
+
+ $$("[data-remove]").forEach(button=>{
+
+  button.onclick=async()=>{
+
+   try{
+
+    await api(`/api/admin/shuttles/${button.dataset.remove}`,{
+     method:"DELETE"
+    });
+
+    toast("Shuttle removed");
+
+   }catch(error){
+
+    toast(error.message);
+
+   }
+
+  };
+
+ });
+
+}
+
+
+// ============================================
+// ADD SHUTTLE
+// ============================================
+
+$("#addBus").onclick=()=>{
+ $("#modal").classList.add("open");
+};
+
+$("#modalClose").onclick=()=>{
+ $("#modal").classList.remove("open");
+};
+
+$("#saveBus").onclick=async()=>{
+
+ try{
+
+  const id=$("#newId").value.trim().toUpperCase();
+
+  if(!id){
+   toast("Please enter a shuttle ID");
+   return;
+  }
+
+  await api("/api/admin/shuttles",{
+   method:"POST",
+   body:JSON.stringify({
+    id,
+    route:$("#newRoute").value
+   })
+  });
+
+  $("#modal").classList.remove("open");
+  $("#newId").value="";
+
+  toast("New shuttle registered");
+
+ }catch(error){
+
+  toast(error.message);
+
+ }
+
+};
+
+
+// ============================================
+// SERVICE HEALTH
+// ============================================
+
+async function checkHealth(){
+
+ try{
+
+  const h=await api("/api/health");
+
+  $("#apiHealth").textContent="ONLINE";
+  $("#apiStatus").textContent="● Online";
+
+  $("#socketStatus").textContent=
+   socket?.connected?"● Connected":"Connecting…";
+
+  $("#dbStatus").textContent=h.database+" connected";
+
+ }catch(error){
+
+  $("#apiHealth").textContent="OFFLINE";
+  $("#apiStatus").textContent="Unavailable";
+  $("#dbStatus").textContent="Unavailable";
+
+  toast("Backend is not reachable");
+
+ }
+
+}
+
+$("#checkHealth").onclick=checkHealth;
+
+$("#reset").onclick=()=>{
+ toast("Demo state can be reset by reloading the page.");
+};
+
+
+// ============================================
+// SOCKET CONNECTION
+// ============================================
+
+function connect(){
+
+ socket=io();
+
+ socket.on("connect",()=>{
+  $("#socketStatus").textContent="● Connected";
+ });
+
+ socket.on("disconnect",()=>{
+  $("#socketStatus").textContent="Disconnected";
+ });
+
+ socket.on("fleet:update",data=>{
+  render(data);
+ });
+
+}
+
+
+// ============================================
+// APPLICATION STARTUP
+// ============================================
+
+async function boot(){
+
+ try{
+
+  const [initialState,routeRecords]=await Promise.all([
+   api("/api/state"),
+   api("/api/routes")
+  ]);
+
+  // Load route records before drawing the map.
+
+  routes=routeRecords;
+  state=initialState;
+
+  $("#mapStatus").textContent="Calculating road-following route geometry...";
+
+  // Fetch each route once through OSRM.
+
+  await loadRoadRoutes();
+
+  // Update state with the enriched route records.
+
+  state.routes=routes;
+
+  // Draw dashboard and map.
+
+  render(state);
+
+  initMap();
+
+  // Connect simulated realtime updates.
+
+  connect();
+
+  checkHealth();
+  loadAlerts();
+
+  setInterval(()=>{
+
+   $("#clock").textContent=
+    new Date().toLocaleTimeString("en-IN",{
+     hour12:false
+    });
+
+  },1000);
+
+  setInterval(loadAlerts,15000);
+
+  console.log("SmartShuttle initialized.");
+  console.log("Dynamic routing:",routes.map(r=>({
+   name:r.name,
+   source:r.routingSource,
+   roadPoints:getRoutePath(r).length
+  })));
+
+  toast("SmartShuttle is ready.");
+
+ }catch(error){
+
+  console.error("Application startup error:",error);
+
+  $("#apiHealth").textContent="OFFLINE";
+
+  toast("Application startup failed: "+error.message);
+
+ }
+
+}
+
+boot();
+
+</script>
+
+</body>
+</html>
